@@ -56,7 +56,7 @@ else:
     st.stop()
 data= df
 #functions
-data.dropna(inplace= True)
+data.dropna(subset='review-text', inplace= True)
 # Making result human friendly
 def get_analysis(score):
     if score < 0:
