@@ -54,9 +54,11 @@ if uploaded_file is not None:
     st.write(df)
 else:
     st.stop()
-data= df
+    
+df.dropna(subset='review-text', inplace= True, axis=0)
+data = df
 #functions
-data.dropna(subset='review-text', inplace= True)
+
 # Making result human friendly
 def get_analysis(score):
     if score < 0:
@@ -266,9 +268,7 @@ data['Neg_Count'] = negative_count
 #Word Count
 data['Word_Count'] = data['review-text'].str.split().str.len()
 
-for i in range(data.shape[0]):
-    if data.loc[i].Word_Count == 0:
-        data.drop(index=i, inplace=True)
+
 data.reset_index(drop=True, inplace=True)
 
 reviews = data['review-text'].str.lower().str.split()
