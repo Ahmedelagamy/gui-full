@@ -1,5 +1,5 @@
 beautifulsoup4==4.11.1
-bertopic==0.11.0
+bertopic==0.12.0
 contractions==0.1.72
 datefinder==0.7.3
 hdbscan==0.8.28
