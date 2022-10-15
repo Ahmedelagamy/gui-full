@@ -216,10 +216,10 @@ data['Neg_Count'] = negative_count
 #Word Count
 data['Word_Count'] = data['review-text'].str.split().str.len()
 
-for i in range(data.shape[0]):
+'''for i in range(data.shape[0]):
     if data.loc[i].Word_Count == 0:
         data.drop(index=i, inplace=True)
-data.reset_index(drop=True, inplace=True)
+data.reset_index(drop=True, inplace=True)'''
 
 reviews = data['review-text'].str.lower().str.split()
 
