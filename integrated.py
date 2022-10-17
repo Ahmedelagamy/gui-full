@@ -441,7 +441,7 @@ vectorizer_model = OnlineCountVectorizer(stop_words="english", decay=.01)
 
 from bertopic import BERTopic
 
-topic_model = BERTopic(umap_model=umap_model,
+topic_model = BERTopic(language='english',n_gram_range=(2,3) ,umap_model=umap_model,
                        hdbscan_model=cluster_model,
                        vectorizer_model=vectorizer_model)
 
