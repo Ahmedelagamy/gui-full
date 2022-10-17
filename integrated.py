@@ -54,7 +54,7 @@ def get_analysis(score):
 
 # Loading Data
 # Applying language detection
-df.dropna(subset='review-text', inplace=True)
+
 text_col = df['review-text'].astype(str)
 
 # Language detection
@@ -512,13 +512,12 @@ st.write(topic_model.get_representative_docs(doc_num))
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= len(df)
-final_dataframe['total_reviews']= len(df)
 final_dataframe['total_english_reviews']= len(en_df)
 final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
 final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
 final_dataframe['non_english_reviews']= len(df) - len(en_df)
-final_dataframe['irrelevant_reviews']= len(final_dataframe['suspected_fake_reviews']) + len(final_dataframe['non_english_reviews'])
-final_dataframe['total_reviews_analyzed']= len(df) - len(final_dataframe['irrelevant_reviews'])
+final_dataframe['irrelevant_reviews']= len(data[data['Rev_Type']==1]) + (len(df) - len(en_df))
+final_dataframe['total_reviews_analyzed']= len(df) - (len(data[data['Rev_Type']==1]) + (len(df) - len(en_df)))
 
 st.write(final_dataframe)
 #Creating a dataframe
