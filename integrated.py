@@ -529,10 +529,4 @@ st.download_button(
      mime='text/csv',
      file_name='analysis.csv')
 
-'''brief_text="there is a total of {num_reviews} for the product {asin_num} of those, there are {num_en} english reviews .there are {positive_num} positive reviews and {negative_num} negative reviews.".format(
-    num_reviews= len(df),
-    asin_num = df['asin'].unique(),
-    num_en= len(df[df['detect']=='en']),
-    positive_num= len(good_reviews),
-    negative_num= len(bad_reviews))'''
-'''st.write(brief_text)'''
+
