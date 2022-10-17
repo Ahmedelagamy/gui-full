@@ -412,7 +412,7 @@ def clean_text(dataframe, col_name):
         PorterStemmer()
         # Lemmatisation
         lem = WordNetLemmatizer()
-        text = [lem.lemmatize(word) for word in text if word not in stop_words]
+        text = [lem.lemmatize(word) for word in text]
 
         text = " ".join(text)
         # print(text)
@@ -514,8 +514,11 @@ final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= len(df)
 final_dataframe['total_reviews']= len(df)
 final_dataframe['total_english_reviews']= len(en_df)
-final_dataframe['fake_reviews']= len(data['Rev_Type']==1)
+final_dataframe['suspected_fake_reviews']= len(data['Rev_Type']==1)
 final_dataframe['non_english_reviews']= len(df) - len(en_df)
+final_dataframe['irrelevant_reviews']= len(final_dataframe['suspected_fake_reviews']) + len(final_dataframe['non_english_reviews'])
+final_dataframe['total_reviews_analyzed']= len(df) - len(final_dataframe['irrelevant_reviews'])
+
 
 #Creating a dataframe
 final_dataframe =final_dataframe.to_csv(index=False).encode('utf-8')
