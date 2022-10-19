@@ -513,7 +513,7 @@ st.write(topic_model.get_representative_docs(doc_num))
 
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
-final_dataframe['total_reviews']= len(df)
+final_dataframe['total_reviews']= total_reviews_num
 final_dataframe['total_english_reviews']= len(en_df)
 final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
 final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
