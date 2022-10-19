@@ -498,6 +498,7 @@ topic_labels = topic_model.generate_topic_labels(nr_words= 2)
 topic_model.set_topic_labels(topic_labels)
 
 # pros
+
 topic_info = topic_model.get_topic_info()
 
 if len(good_reviews) < 300:
@@ -507,6 +508,15 @@ else:
   topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
 
 st.write(topic_info)
+
+#Creating a dataframe
+topic_info_data =final_dataframe.to_csv(index=False).encode('utf-8')
+
+st.download_button(
+     label="Download topics",
+     data=final_dataframe,
+     mime='text/csv',
+     file_name='topics.csv')
 
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs())
