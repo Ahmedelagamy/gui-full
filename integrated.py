@@ -40,6 +40,9 @@ if uploaded_file is not None:
 else:
     st.stop()
 
+final_dataframe= pd.DataFrame()
+final_dataframe['asin']= data['asin'].unique()
+final_dataframe['total_reviews']= len(df)
 data= df
 
 # Making result human friendly
