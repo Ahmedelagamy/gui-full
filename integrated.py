@@ -472,6 +472,8 @@ if tab == 'Positive Review':
     topic_model.topics_ = pro_topics
 
   st.write(topic_model.get_topic_info())
+  doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
+  st.write(topic_model.get_representative_docs())
 
 else:
     # Feature Engineering
@@ -491,6 +493,8 @@ else:
     topic_model.partial_fit(docs)
     cons_topics.extend(topic_model.topics_)
   topic_model.topics_ = cons_topics
+  doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
+  st.write(topic_model.get_representative_docs())
 
   st.write(cons_topics)
 
@@ -518,12 +522,11 @@ st.download_button(
      mime='text/csv',
      file_name='topics.csv')
 
-representative_docs = []
+'''representative_docs = []
 for docs in doc_chunks:
     representative_docs.extend(topic_model.representative_docs_)
-
 topic_model.representative_docs_ = representative_docs
-st.write(representative_docs)
+st.write(representative_docs)'''
 
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs())
