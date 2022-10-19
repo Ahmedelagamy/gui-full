@@ -39,11 +39,11 @@ if uploaded_file is not None:
     st.write(df)
 else:
     st.stop()
-
+data= df
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= len(df)
-data= df
+
 
 # Making result human friendly
 def get_analysis(score):
