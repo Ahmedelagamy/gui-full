@@ -40,11 +40,8 @@ if uploaded_file is not None:
 else:
     st.stop()
     
+total_reviews_num = len(df)    
 data= df
-final_dataframe= pd.DataFrame()
-
-final_dataframe['total_reviews']= len(df)
-
 
 # Making result human friendly
 def get_analysis(score):
@@ -514,8 +511,9 @@ st.write(topic_info)
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs(doc_num))
 
-
+final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
+final_dataframe['total_reviews']= len(df)
 final_dataframe['total_english_reviews']= len(en_df)
 final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
 final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
