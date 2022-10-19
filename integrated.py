@@ -510,11 +510,11 @@ else:
 st.write(topic_info)
 
 #Creating a dataframe
-topic_info_data =final_dataframe.to_csv(index=False).encode('utf-8')
+topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
 st.download_button(
      label="Download topics",
-     data=final_dataframe,
+     data=topic_info,
      mime='text/csv',
      file_name='topics.csv')
 
