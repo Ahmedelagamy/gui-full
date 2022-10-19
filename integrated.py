@@ -146,7 +146,7 @@ for x in POS:
 
 
 import datefinder
-data = df
+data = en_df
 
 #content= data['review-date'].astype('str').apply(datefinder.find_dates(data['review-date']))
 #content
@@ -514,7 +514,7 @@ st.write(topic_info)
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs(doc_num))
 
-final_dataframe= pd.DataFrame()
+
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_english_reviews']= len(en_df)
 final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
