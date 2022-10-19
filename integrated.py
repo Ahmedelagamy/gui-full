@@ -520,7 +520,7 @@ st.download_button(
 
 representative_docs = []
 for docs in doc_chunks:
-    topics.extend(topic_model.representative_docs_)
+    representative_docs.extend(topic_model.representative_docs_)
 
 topic_model.representative_docs_ = representative_docs
 st.write(representative_docs)
