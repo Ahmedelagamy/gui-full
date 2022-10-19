@@ -514,7 +514,7 @@ topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
 st.download_button(
      label="Download topics",
-     data=topic_info,
+     data=topic_info_data,
      mime='text/csv',
      file_name='topics.csv')
 
