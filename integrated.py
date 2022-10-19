@@ -472,7 +472,7 @@ if tab == 'Positive Review':
     topic_model.topics_ = pro_topics
 
   st.write(topic_model.get_topic_info())
-  doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
+  doc_num = float(st.number_input('enter the number of topic to explore', value= 0, key=1))
   st.write(topic_model.get_representative_docs())
 
 else:
