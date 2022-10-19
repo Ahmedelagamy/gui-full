@@ -497,8 +497,7 @@ else:
 topic_labels = topic_model.generate_topic_labels(nr_words= 2)
 topic_model.set_topic_labels(topic_labels)
 
-
-    # pros
+# pros
 topic_info = topic_model.get_topic_info()
 
 if len(good_reviews) < 300:
@@ -508,8 +507,9 @@ else:
   topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
 
 st.write(topic_info)
+
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
-st.write(topic_model.get_representative_docs(doc_num))
+st.write(topic_model.get_representative_docs())
 
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
