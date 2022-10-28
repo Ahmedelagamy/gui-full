@@ -522,11 +522,11 @@ st.download_button(
      mime='text/csv',
      file_name='topics.csv')
 
-'''representative_docs = []
-for docs in doc_chunks:
+ representative_docs = []
+ for docs in doc_chunks:
     representative_docs.extend(topic_model.representative_docs_)
-topic_model.representative_docs_ = representative_docs
-st.write(representative_docs)'''
+ topic_model.representative_docs_ = representative_docs
+ st.write(representative_docs)
 
 doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs())
