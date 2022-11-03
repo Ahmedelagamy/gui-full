@@ -483,7 +483,7 @@ st.download_button(
      data=topic_info_data,
      mime='text/csv',
      file_name='topics.csv')
-st.write(df['Data Source').value_counts())
+st.write(df['Data Source'].value_counts())
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= total_reviews_num
