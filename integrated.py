@@ -56,7 +56,7 @@ def get_analysis(score):
 # Loading Data
 # Applying language detection
 
-text_col = df['review-text'].astype(str)
+text_col = df['Comment'].astype(str)
 
 # Language detection
 langdet = []
@@ -151,24 +151,24 @@ data = en_df
 
 """**Removing Noise**"""
 
-data['review-text'] = data['review-text'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
+data['Comment'] = data['Comment'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
 
 def fixContra(text):
     return contractions.fix(text)
 
-data['review-text'] = data['review-text'].apply(lambda x: fixContra(x))
+data['Comment'] = data['Comment'].apply(lambda x: fixContra(x))
 # \W represents Special characters
-data['review-text'] = data['review-text'].str.replace('\W', ' ')
+data['Comment'] = data['Comment'].str.replace('\W', ' ')
 # \d represents Numeric digits
-data['review-text'] = data['review-text'].str.replace('\d', ' ')
-data['review-text'] = data['review-text'].str.lower()
+data['Comment'] = data['Comment'].str.replace('\d', ' ')
+data['Comment'] = data['Comment'].str.lower()
 data.head()
 
 
 
 
 
-reviews = data['review-text'].tolist()
+reviews = data['Comment'].tolist()
 sentiment_score = []
 sentiment_subjectivity=[]
 for rev in reviews:
@@ -200,7 +200,7 @@ plt.pie(values, labels = label)
 st.pyplot(fig)
 
 #Number of Negative words in a review
-reviews = data['review-text'].tolist()
+reviews = data['Comment'].tolist()
 negative_count = []
 for rev in reviews:
     words = rev.split()
@@ -215,19 +215,19 @@ for rev in reviews:
 data['Neg_Count'] = negative_count
 
 #Word Count
-data['Word_Count'] = data['review-text'].str.split().str.len()
+data['Word_Count'] = data['Comment'].str.split().str.len()
 
 '''for i in range(data.shape[0]):
     if data.loc[i].Word_Count == 0:
         data.drop(index=i, inplace=True)
 data.reset_index(drop=True, inplace=True)'''
 
-reviews = data['review-text'].str.lower().str.split()
+reviews = data['Comment'].str.lower().str.split()
 
 # Get amount of unique words
 data['Unique_words'] = reviews.apply(set).apply(len)
 data['Unique_words'] = data[['Unique_words']].div(data.Word_Count, axis=0)
-review_text = data['review-text']
+review_text = data['Comment']
 
 array_Noun = []
 array_Adj = []
@@ -344,7 +344,7 @@ data.head()
 # Removing text for transformation
 data['rating-count'] = data['rating-count'].astype('category')
 data['rating-avg'] = data['rating-avg'].astype('category')
-data['review-text'] = data['review-text'].astype('str')
+data['Comment'] = data['Comment'].astype('str')
 
 data.groupby(['asin', 'Review Score'])['Review Score'].count()
 
@@ -365,7 +365,7 @@ data['rating-avg']= data['rating-avg'].apply(pd.to_numeric, errors='coerce').ast
 
 
 df = data.loc[:, data.columns[4:-1]]
-df.drop(['review-text','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
+df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
        'Nega_Count', 'Aux_Count','review-rating','review-pagination','review-date','review-author','detect'], axis=1, inplace=True)
 
 min_max_scaler = preprocessing.MinMaxScaler()
@@ -423,8 +423,8 @@ def clean_text(dataframe, col_name):
 
 
 # Applying function
-bad_reviews_data = clean_text(bad_reviews, 'review-text')
-good_reviews_data= clean_text(good_reviews, 'review-text')
+bad_reviews_data = clean_text(bad_reviews, 'Comment')
+good_reviews_data= clean_text(good_reviews, 'Comment')
 
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
 
