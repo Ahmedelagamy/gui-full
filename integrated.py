@@ -466,7 +466,7 @@ if tab == 'Positive Review':
   pro_topics = []
   representative_docs = []
 
-  topic_model.fit(docs)
+  topic_model.fit(doc_chunks)
   st.write(topic_model.get_topic_info())
   doc_num = float(st.number_input('enter the number of topic to explore', value= 0, key=1))
   st.write(topic_model.get_representative_docs())
