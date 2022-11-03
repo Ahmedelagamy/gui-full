@@ -86,7 +86,6 @@ from textblob import TextBlob
 #POS Tagging
 import nltk
 nltk.download("popular")
-from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
