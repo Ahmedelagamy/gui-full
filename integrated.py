@@ -454,8 +454,6 @@ if tab == 'Positive Review':
     good_reviews_data.extend(3*good_reviews_data)
   else:
     pass
-
-
   topic_model.fit(good_reviews_data)
   st.write(topic_model.get_topic_info())
   doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
@@ -472,16 +470,11 @@ else:
 
 
   st.dataframe(bad_reviews_data)
-  doc_chunks = [bad_reviews_data[i:i+1000] for i in range(0, len(bad_reviews_data), 1000)]
-  cons_topics = []
-  for docs in doc_chunks:
-    topic_model.partial_fit(docs)
-    cons_topics.extend(topic_model.topics_)
+  topic_model.fit(bad_reviews_data)
+ 
     
-  topic_model.topics_ = cons_topics
   st.write(topic_model.get_representative_docs(doc_num))
 
-  st.write(cons_topics)
 
 topic_labels = topic_model.generate_topic_labels(nr_words= 2)
 topic_model.set_topic_labels(topic_labels)
