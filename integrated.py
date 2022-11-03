@@ -475,6 +475,7 @@ st.write(topic_info)
 doc_num = int(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs(doc_num))
 
+
 #Creating a dataframe
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
