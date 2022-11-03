@@ -361,7 +361,7 @@ data['Count Reviews']= data['Count Reviews'].apply(pd.to_numeric, errors='coerce
 
 df = data.loc[:, data.columns[4:-1]]
 df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
-       'Nega_Count', 'Aux_Count','review-rating','review-pagination','review-date','review-author','detect'], axis=1, inplace=True)
+       'Nega_Count', 'Aux_Count','Count Reviews','detect'], axis=1, inplace=True)
 
 min_max_scaler = preprocessing.MinMaxScaler()
 Columns=df.columns
@@ -487,7 +487,7 @@ st.download_button(
      data=topic_info_data,
      mime='text/csv',
      file_name='topics.csv')
-
+st.write(df['Data Source').count())
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= total_reviews_num
