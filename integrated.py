@@ -459,18 +459,13 @@ if tab == 'Positive Review':
     pass
 
 
-  doc_chunks = [good_reviews_data[i:i+1000] for i in range(0, len(good_reviews_data), 1000)]
-
-  pro_topics = []
-  representative_docs = []
-
   topic_model.fit(good_reviews_data)
   st.write(topic_model.get_topic_info())
-  doc_num = float(st.number_input('enter the number of topic to explore', value= 0, key=1))
-  st.write(topic_model.get_representative_docs())
+  doc_num = float(st.number_input('enter the number of topic to explore', value= 0)
+  st.write(topic_model.get_representative_docs(doc_num))
 
 else:
-    # Feature Engineering
+   
   st.subheader('Negative Reviews')
     #Accounting for small dataset
 
@@ -487,7 +482,6 @@ else:
     cons_topics.extend(topic_model.topics_)
     
   topic_model.topics_ = cons_topics
-  doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
   st.write(topic_model.get_representative_docs(doc_num))
 
   st.write(cons_topics)
