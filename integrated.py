@@ -1,4 +1,3 @@
-# Imports
 import pandas as pd
 import streamlit as st
 from bertopic import BERTopic
@@ -342,22 +341,31 @@ st.write(data['Rev_Type'].value_counts())
 data.head()
 
 # Removing text for transformation
-data['Count Reviews'] = data['Count Reviews'].astype('category')
-data['Average Rate'] = data['Average Rate'].astype('category')
+data['rating-count'] = data['rating-count'].astype('category')
+data['rating-avg'] = data['rating-avg'].astype('category')
 data['Comment'] = data['Comment'].astype('str')
-data['Count Reviews']= data['Count Reviews'].str.strip('Reviews')
+
+data.groupby(['asin', 'Review Score'])['Review Score'].count()
+
+data['rating-count']= data['rating-count'].str.strip(' global ratings')
+data['rating-avg']= data['rating-avg'].str.strip(' out of 5')
+
+
 # Extracting nums from textual representation
 # Refactor into function
-data['Count Reviews'] = data['Count Reviews'].astype(str).apply(nums_from_string.get_nums)
+data['rating-count'] = data['rating-count'].astype(str).apply(nums_from_string.get_nums)
+data['rating-avg'] = data['rating-avg'].astype(str).apply(nums_from_string.get_nums)
 
 # converting num lists into actual float
-data['Count Reviews']= data['Count Reviews'].apply(pd.to_numeric, errors='coerce').astype(float)
+data['rating-count']= data['rating-count'].apply(pd.to_numeric, errors='coerce').astype(float)
+data['rating-avg']= data['rating-avg'].apply(pd.to_numeric, errors='coerce').astype(float)
+
 
 
 
 df = data.loc[:, data.columns[4:-1]]
 df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
-         'Nega_Count', 'Aux_Count','Count Reviews','detect','Rate','Date' ], axis=1, inplace=True)
+       'Nega_Count', 'Aux_Count','review-rating','review-pagination','review-date','review-author','detect'], axis=1, inplace=True)
 
 min_max_scaler = preprocessing.MinMaxScaler()
 Columns=df.columns
@@ -475,7 +483,6 @@ st.write(topic_info)
 doc_num = int(st.number_input('enter the number of topic to explore', value= 0))
 st.write(topic_model.get_representative_docs(doc_num))
 
-
 #Creating a dataframe
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
@@ -484,7 +491,7 @@ st.download_button(
      data=topic_info_data,
      mime='text/csv',
      file_name='topics.csv')
-st.write(df['Data Source'].value_counts())
+
 final_dataframe= pd.DataFrame()
 final_dataframe['asin']= data['asin'].unique()
 final_dataframe['total_reviews']= total_reviews_num
@@ -504,5 +511,3 @@ st.download_button(
      data=final_dataframe,
      mime='text/csv',
      file_name='analysis.csv')
-
-
