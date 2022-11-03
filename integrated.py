@@ -453,10 +453,11 @@ if tab == 'Positive Review':
     good_reviews_data.extend(3*good_reviews_data)
   else:
     pass
+
   topic_model.fit(good_reviews_data)
   st.write(topic_model.get_topic_info())
   doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
-  st.write(topic_model.get_representative_docs(doc_num))
+  st.write(topic_model.get_representative_docs())
 
 else:
    
