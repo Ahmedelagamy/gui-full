@@ -467,7 +467,7 @@ if tab == 'Positive Review':
   representative_docs = []
 
   for docs in doc_chunks:
-    topic_model.partial_fit(docs)
+    topic_model.fit(docs)
     pro_topics.extend(topic_model.topics_)
     topic_model.representative_docs_ = representative_docs
     st.write(representative_docs)
