@@ -490,7 +490,7 @@ else:
     
   topic_model.topics_ = cons_topics
   doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
-  st.write(topic_model.get_representative_docs())
+  st.write(topic_model.get_representative_docs(doc_num))
 
   st.write(cons_topics)
 
