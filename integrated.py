@@ -356,8 +356,7 @@ data['Count Reviews']= data['Count Reviews'].apply(pd.to_numeric, errors='coerce
 
 
 df = data.loc[:, data.columns[4:-1]]
-df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
-       'Nega_Count', 'Aux_Count','Count Reviews','detect','Rate','Date,'URL scraped','Timestamp','Datestamp','Search Name','Data Source'], axis=1, inplace=True)
+df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count','Nega_Count', 'Aux_Count','Count Reviews','detect','Rate','Date','URL scraped','Timestamp','Datestamp','Search Name','Data Source'], axis=1, inplace=True)
 
 min_max_scaler = preprocessing.MinMaxScaler()
 Columns=df.columns
