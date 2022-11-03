@@ -474,9 +474,8 @@ else:
     
   st.write(topic_model.get_representative_docs(doc_num))
 
-
-topic_labels = topic_model.generate_topic_labels(nr_words= 2)
-topic_model.set_topic_labels(topic_labels)
+  topic_labels = topic_model.generate_topic_labels(nr_words= 2)
+  topic_model.set_topic_labels(topic_labels)
 
 # pros
 
