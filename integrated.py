@@ -432,63 +432,57 @@ tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
 from bertopic import BERTopic
 
 # Create instances of GPU-accelerated UMAP and HDBSCAN
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.decomposition import IncrementalPCA
-from bertopic.vectorizers import OnlineCountVectorizer
 
+umap_model = UMAP(n_components=10, n_neighbors=15, min_dist=0.0, random_state= 42)
 
-from bertopic import BERTopic
-
-topic_model = BERTopic(language='english',n_gram_range=(2,5))
-
+topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,4), verbose=True, embedding_model="all-mpnet-base-v2")
 
 # Models
 if tab == 'Positive Review':
-
+    
   st.subheader('Positive Reviews')
   st.dataframe(good_reviews_data)
-
+    
 # Fixing small dataset bug
   if len(good_reviews) < 200: # Workaround if not enough documents https://github.com/MaartenGr/BERTopic/issues/97 , https://github.com/MaartenGr/Concept/issues/5
     good_reviews_data.extend(3*good_reviews_data)
   else:
     pass
-
-  topic_model.fit(good_reviews_data)
-  st.write(topic_model.get_topic_info())
-  doc_num = float(st.number_input('enter the number of topic to explore', value= 0))
-  st.write(topic_model.get_representative_docs())
+    
+  topic_model.fit(good_reviews_data)         
 
 else:
-   
+  
+     
+    # Feature Engineering
   st.subheader('Negative Reviews')
     #Accounting for small dataset
-
-
+    
   if len(bad_reviews) < 300: # Workaround if not enough documents https://github.com/MaartenGr/BERTopic/issues/97 , https://github.com/MaartenGr/Concept/issues/5
         bad_reviews_data.extend(3*bad_reviews_data)
 
-
+        
   st.dataframe(bad_reviews_data)
   topic_model.fit(bad_reviews_data)
- 
+
+topic_model.get_topic_info()
     
-  st.write(topic_model.get_representative_docs(doc_num))
-
-  topic_labels = topic_model.generate_topic_labels(nr_words= 2)
-  topic_model.set_topic_labels(topic_labels)
-
-# pros
-
+topic_labels = topic_model.generate_topic_labels(nr_words= 2)
+topic_model.set_topic_labels(topic_labels)
+    
+    
+    # pros
 topic_info = topic_model.get_topic_info()
-
+    
 if len(good_reviews) < 300:
   topic_info['Count']=topic_info['Count']/4
   topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
 else:
   topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
-
+    
 st.write(topic_info)
+doc_num = int(st.number_input('enter the number of topic to explore', value= 0))
+st.write(topic_model.get_representative_docs(doc_num))
 
 #Creating a dataframe
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
