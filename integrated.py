@@ -346,7 +346,6 @@ data['Count Reviews'] = data['Count Reviews'].astype('category')
 data['Average Rate'] = data['Average Rate'].astype('category')
 data['Comment'] = data['Comment'].astype('str')
 data['Count Reviews']= data['Count Reviews'].str.strip('Reviews')
-
 # Extracting nums from textual representation
 # Refactor into function
 data['Count Reviews'] = data['Count Reviews'].astype(str).apply(nums_from_string.get_nums)
