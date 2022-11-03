@@ -345,9 +345,6 @@ data.head()
 data['Count Reviews'] = data['Count Reviews'].astype('category')
 data['Average Rate'] = data['Average Rate'].astype('category')
 data['Comment'] = data['Comment'].astype('str')
-
-data.groupby(['asin', 'Review Score'])['Review Score'].count()
-
 data['Count Reviews']= data['Count Reviews'].str.strip('Reviews')
 
 # Extracting nums from textual representation
