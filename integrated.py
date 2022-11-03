@@ -437,13 +437,10 @@ from sklearn.cluster import MiniBatchKMeans
 from sklearn.decomposition import IncrementalPCA
 from bertopic.vectorizers import OnlineCountVectorizer
 
-umap_model = IncrementalPCA(n_components=10)
-cluster_model = MiniBatchKMeans(n_clusters=40, random_state=0)
 
 from bertopic import BERTopic
 
-topic_model = BERTopic(language='english',n_gram_range=(2,4) ,umap_model=umap_model,
-                       hdbscan_model=cluster_model)
+topic_model = BERTopic(language='english',n_gram_range=(2,5))
 
 
 # Models
