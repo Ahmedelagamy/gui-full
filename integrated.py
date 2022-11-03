@@ -342,25 +342,20 @@ st.write(data['Rev_Type'].value_counts())
 data.head()
 
 # Removing text for transformation
-data['rating-count'] = data['rating-count'].astype('category')
-data['rating-avg'] = data['rating-avg'].astype('category')
+data['Count Reviews'] = data['Count Reviews'].astype('category')
+data['Average Rate'] = data['Average Rate'].astype('category')
 data['Comment'] = data['Comment'].astype('str')
 
 data.groupby(['asin', 'Review Score'])['Review Score'].count()
 
-data['rating-count']= data['rating-count'].str.strip(' global ratings')
-data['rating-avg']= data['rating-avg'].str.strip(' out of 5')
-
+data['Count Reviews']= data['Count Reviews'].str.strip('Reviews')
 
 # Extracting nums from textual representation
 # Refactor into function
-data['rating-count'] = data['rating-count'].astype(str).apply(nums_from_string.get_nums)
-data['rating-avg'] = data['rating-avg'].astype(str).apply(nums_from_string.get_nums)
+data['Count Reviews'] = data['Count Reviews'].astype(str).apply(nums_from_string.get_nums)
 
 # converting num lists into actual float
-data['rating-count']= data['rating-count'].apply(pd.to_numeric, errors='coerce').astype(float)
-data['rating-avg']= data['rating-avg'].apply(pd.to_numeric, errors='coerce').astype(float)
-
+data['Count Reviews']= data['Count Reviews'].apply(pd.to_numeric, errors='coerce').astype(float)
 
 
 
