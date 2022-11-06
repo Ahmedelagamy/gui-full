@@ -336,23 +336,8 @@ def label(Auth, At, N, Adj, V, Av, S, Sub, W):
 data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Noun_Count'], x['Adj_Count'], x['Verb_Count'], x['Adv_Count'], x['Sentiment'], x['Subjectivity'], x['Word_Count']), axis = 1)
 
 st.write(data['Rev_Type'].value_counts())
-'''
-data['Count Reviews']= data['Count Reviews'].str.strip(' reviews')
-data['Average Rate']= data['Average Rate'].str.strip(' out of 5')
 
 
-# Extracting nums from textual representation
-# Refactor into function
-data['rating-count'] = data['rating-count'].astype(str).apply(nums_from_string.get_nums)
-data['rating-avg'] = data['rating-avg'].astype(str).apply(nums_from_string.get_nums)
-
-# converting num lists into actual float
-data['rating-count']= data['rating-count'].apply(pd.to_numeric, errors='coerce').astype(float)
-data['rating-avg']= data['rating-avg'].apply(pd.to_numeric, errors='coerce').astype(float)
-
-
-
-'''
 df = data.loc[:, data.columns[4:-1]]
 df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
        'Nega_Count', 'Average Rate','Aux_Count','Count Reviews','Rate','Date','URL scraped','detect'], axis=1, inplace=True)
