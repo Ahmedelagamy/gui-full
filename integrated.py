@@ -479,11 +479,3 @@ final_dataframe['total_reviews_analyzed']= len(df) - (len(data[data['Rev_Type']=
 st.write(final_dataframe)
 
 st.write(en_df.groubby('Data Source').count()
-
-final_dataframe =final_dataframe.to_csv(index=False).encode('utf-8')
-
-st.download_button(
-     label="Download Analysis",
-     data=final_dataframe,
-     mime='text/csv',
-     file_name='analysis.csv')
