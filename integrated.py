@@ -476,10 +476,10 @@ final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
 final_dataframe['non_english_reviews']=total_reviews_num - len(en_df)
 final_dataframe['irrelevant_reviews']= len(data[data['Rev_Type']==1]) + (len(df) - len(en_df))
 final_dataframe['total_reviews_analyzed']= len(df) - (len(data[data['Rev_Type']==1]) + (len(df) - len(en_df)))
-
 st.write(final_dataframe)
-st.write(data.groupby('Data Source').count())
-#Creating a dataframe
+
+st.write(en_df.groubby('Data Source').count()
+#Creating downloadable dataframe
 final_dataframe =final_dataframe.to_csv(index=False).encode('utf-8')
 
 st.download_button(
