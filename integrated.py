@@ -480,8 +480,6 @@ st.write(final_dataframe)
 
 st.write(en_df.groubby('Data Source').count()
 
- #Creating downloadable dataframe
-
 final_dataframe =final_dataframe.to_csv(index=False).encode('utf-8')
 
 st.download_button(
