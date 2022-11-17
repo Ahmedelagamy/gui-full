@@ -462,6 +462,12 @@ st.write(topic_model.get_representative_docs(doc_num))
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
 st.download_button(
+     label="Download df",
+     data=en_df,
+     mime='text/csv',
+     file_name='topics.csv')
+
+st.download_button(
      label="Download topics",
      data=topic_info_data,
      mime='text/csv',
