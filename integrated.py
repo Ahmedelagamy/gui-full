@@ -461,6 +461,7 @@ st.write(topic_model.get_representative_docs(doc_num))
 #Creating a dataframe
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
 
+en_df= en_df.to_csv(index=False).encode('utf-8')
 st.download_button(
      label="Download df",
      data=en_df,
