@@ -349,7 +349,7 @@ data = {"Columns":['Total Reviews', 'suspected reviews','One Word Reviews','Engl
 
 # Create DataFrame
 df_1 = pd.DataFrame(data)
-st,write(df_1)
+st.write(df_1)
 df_1 =df_1.to_csv(index=False).encode('utf-8')
 st.download_button(
 label="Download Analysis",
