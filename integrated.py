@@ -17,7 +17,7 @@ from langdetect import detect
 import sklearn
 # function to plot most frequent terms
 import nltk
-nltk.download("popular")
+
 from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
