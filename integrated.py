@@ -405,12 +405,8 @@ from bertopic import BERTopic
 # Create instances of GPU-accelerated UMAP and HDBSCAN
 
 umap_model = UMAP(n_components=10, n_neighbors=15, min_dist=0.0, random_state= 42)
-from sklearn.feature_extraction.text import TfidfVectorizer
-
 # Create TF-IDF sparse matrix
-vectorizer = TfidfVectorizer(min_df=5)
-
-topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2",vectorizer=vectorizer)
+topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2")
 
 # Models
 if tab == 'Positive Review':
