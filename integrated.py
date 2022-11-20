@@ -8,7 +8,6 @@ from hdbscan import HDBSCAN
 import re
 import nltk
 nltk.download('stopwords')
-nltk.download('omw-1.4')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 nltk.download('wordnet')
@@ -18,7 +17,6 @@ import sklearn
 # function to plot most frequent terms
 import nltk
 
-from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
