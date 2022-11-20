@@ -331,6 +331,31 @@ custom_stopwords = st.text_input('Enter Stopword')
 custom_stopwords = custom_stopwords.split()
 nltk_Stop= stopwords.words("english")
 final_stop_words = nltk_Stop + custom_stopwords
+data['Rev_Type'].replace(1,'Suspected',inplace=True)
+data['Rev_Type'].replace(0,'Real', inplace=True)
+
+len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
+
+
+youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
+amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')])
+google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')])
+
+data = {"Columns":['Total Reviews', 'suspected reviews','One Word Reviews','English reviews','Total Analyzed'],
+        'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "YouTube") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]), youtube_total],
+        'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "Amazon") & (data['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]), amazon_total],
+        'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')]),len(data[(data['Data Source'] == "Google") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]),google_total]}
+
+
+# Create DataFrame
+df_1 = pd.DataFrame(data)
+st,write(df_1)
+df_1 =df_1.to_csv(index=False).encode('utf-8')
+st.download_button(
+label="Download Analysis",
+data=df_1,
+mime='text/csv',
+file_name='analysis.csv')
 
 #text cleaning function
 def clean_text(dataframe, col_name):
@@ -443,49 +468,5 @@ st.download_button(
      mime='text/csv',
      file_name='topics.csv')
 
-final_dataframe= pd.DataFrame()
-final_dataframe['Search Name']= data['Search Name'].unique()
-final_dataframe['total_reviews']= total_reviews_num
-final_dataframe['total_english_reviews']= len(en_df)
-final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
-final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
-final_dataframe['non_english_reviews']=total_reviews_num - len(en_df)
-final_dataframe['irrelevant_reviews']= len(data[data['Rev_Type']==1]) + (len(data) - len(en_df))
-final_dataframe['total_reviews_analyzed']= len(data) - (len(data[data['Rev_Type']==1]) + (len(data) - len(en_df)))
-st.write(final_dataframe)
 
-
-data['Rev_Type'].replace(1,'Suspected',inplace=True)
-data['Rev_Type'].replace(0,'Real', inplace=True)
-
-len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
-
-
-youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
-amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')])
-google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')])
-
-data = {"Columns":['Total Reviews', 'suspected reviews','One Word Reviews','English reviews','Total Analyzed'],
-        'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "YouTube") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]), youtube_total],
-        'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "Amazon") & (data['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]), amazon_total],
-        'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')]),len(data[(data['Data Source'] == "Google") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]),google_total]}
-
-
-# Create DataFrame
-df_1 = pd.DataFrame(data)
-st,write(df_1)
-df_1 =df_1.to_csv(index=False).encode('utf-8')
-st.download_button(
-label="Download Analysis",
-data=df_1,
-mime='text/csv',
-file_name='analysis.csv')
-
-final_dataframe =final_dataframe.to_csv(index=False).encode('utf-8')
-
-st.download_button(
-     label="Download Analysis",
-     data=final_dataframe,
-     mime='text/csv',
-     file_name='analysis.csv')
 
