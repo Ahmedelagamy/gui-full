@@ -409,7 +409,7 @@ from bertopic import BERTopic
 
 umap_model = UMAP(n_components=10, n_neighbors=15, min_dist=0.0, random_state= 42)
 
-topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,4), verbose=True, embedding_model="all-mpnet-base-v2")
+topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2")
 
 # Models
 if tab == 'Positive Review':
@@ -441,7 +441,7 @@ else:
 
 topic_model.get_topic_info()
     
-topic_labels = topic_model.generate_topic_labels(nr_words= 2)
+topic_labels = topic_model.generate_topic_labels(nr_words= 3)
 topic_model.set_topic_labels(topic_labels)
     
     
