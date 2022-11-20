@@ -450,8 +450,8 @@ final_dataframe['total_english_reviews']= len(en_df)
 final_dataframe['one_word_review']= len(data[data['Word_Count']==1])
 final_dataframe['suspected_fake_reviews']= len(data[data['Rev_Type']==1])
 final_dataframe['non_english_reviews']=total_reviews_num - len(en_df)
-final_dataframe['irrelevant_reviews']= len(data[data['Rev_Type']==1]) + (len(df) - len(en_df))
-final_dataframe['total_reviews_analyzed']= len(df) - (len(data[data['Rev_Type']==1]) + (len(df) - len(en_df)))
+final_dataframe['irrelevant_reviews']= len(data[data['Rev_Type']==1]) + (len(data) - len(en_df))
+final_dataframe['total_reviews_analyzed']= len(data) - (len(data[data['Rev_Type']==1]) + (len(data) - len(en_df)))
 st.write(final_dataframe)
 
 
