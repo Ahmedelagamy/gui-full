@@ -342,9 +342,6 @@ df = data.loc[:, data.columns[4:-1]]
 df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
        'Nega_Count', 'Average Rate','Aux_Count','Count Reviews','Rate','Date','URL scraped','detect'], axis=1, inplace=True)
 
-min_max_scaler = preprocessing.MinMaxScaler()
-Columns=df.columns
-df[Columns] = min_max_scaler.fit_transform(df[Columns])
 
 en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
 bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
@@ -408,8 +405,12 @@ from bertopic import BERTopic
 # Create instances of GPU-accelerated UMAP and HDBSCAN
 
 umap_model = UMAP(n_components=10, n_neighbors=15, min_dist=0.0, random_state= 42)
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2")
+# Create TF-IDF sparse matrix
+vectorizer = TfidfVectorizer(min_df=5)
+
+topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2",vectorizer=vectorizer)
 
 # Models
 if tab == 'Positive Review':
