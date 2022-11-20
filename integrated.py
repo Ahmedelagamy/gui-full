@@ -65,7 +65,7 @@ for i in range(len(data)):
 
     langdet.append(lang)
     
-df['detect'] = langdet
+data['detect'] = langdet
 # Select language module
 en_df = data[data['detect'] == 'en']
 
