@@ -33,13 +33,12 @@ st.markdown("This application is a streamlit deployment to automate analysis")
 uploaded_file = st.file_uploader("Choose a file")
 
 if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file)
-    st.write(df)
+    data = pd.read_excel(uploaded_file)
 else:
     st.stop()
     
-total_reviews_num = len(df)    
-data= df
+total_reviews_num = len(data)    
+
 
 # Making result human friendly
 def get_analysis(score):
@@ -54,11 +53,11 @@ def get_analysis(score):
 # Loading Data
 # Applying language detection
 
-text_col = df['Comment'].astype(str)
+text_col = data['Comment'].astype(str)
 
 # Language detection
 langdet = []
-for i in range(len(df)):
+for i in range(len(data)):
     try:
         lang=detect(text_col[i])
     except:
@@ -68,11 +67,9 @@ for i in range(len(df)):
     
 df['detect'] = langdet
 # Select language module
-en_df = df[df['detect'] == 'en']
+en_df = data[data['detect'] == 'en']
 
 
-#Pre-Processing Imports
-from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import contractions
@@ -94,20 +91,7 @@ import re
 import string
 import nums_from_string
 #Model Training and Evaluation Imports
-from time import time
-from sklearn import preprocessing, model_selection
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score, roc_curve, accuracy_score
-from sklearn.naive_bayes import GaussianNB
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-import pickle
-import joblib
-from sklearn.tree import DecisionTreeClassifier
 import seaborn as sns
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV,StratifiedKFold
 import bertopic
 from bertopic import BERTopic
 from sklearn.cluster import MiniBatchKMeans
@@ -336,9 +320,6 @@ data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Nou
 st.write(data['Rev_Type'].value_counts())
 
 
-df = data.loc[:, data.columns[4:-1]]
-df.drop(['Comment','Neg_Count','Unique_words','Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count',
-       'Nega_Count', 'Average Rate','Aux_Count','Count Reviews','Rate','Date','URL scraped','detect'], axis=1, inplace=True)
 
 
 en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
@@ -455,13 +436,6 @@ st.write(topic_model.get_representative_docs(doc_num))
 
 #Creating a dataframe
 topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
-
-en_df= en_df.to_csv(index=False).encode('utf-8')
-st.download_button(
-     label="Download df",
-     data=en_df,
-     mime='text/csv',
-     file_name='topics.csv')
 
 st.download_button(
      label="Download topics",
