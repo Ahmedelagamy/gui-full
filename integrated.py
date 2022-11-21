@@ -334,6 +334,8 @@ final_stop_words = nltk_Stop + custom_stopwords
 data['Rev_Type'].replace(1,'Suspected',inplace=True)
 data['Rev_Type'].replace(0,'Real', inplace=True)
 
+
+
 len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
 
 st.write('search terms used are:')
@@ -421,7 +423,7 @@ df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], re
             ).rename(columns={0: 'frequency', 1:'Pros'})
 
 st.write('Top pros')
-st.write(df_ngram)
+st.write(df_pros)
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
 
 
