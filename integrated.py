@@ -408,7 +408,6 @@ good_reviews_data= clean_text(good_reviews, 'Comment')
 
 # ngram
 from sklearn.feature_extraction.text import CountVectorizer
-from nltk.corpus import stopwords
 stoplist = stopwords.words('english') + ['though']
 
 c_vec = CountVectorizer(stop_words=stoplist, ngram_range=(2,3))
@@ -420,6 +419,7 @@ count_values = ngrams.toarray().sum(axis=0)
 vocab = c_vec.vocabulary_
 df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
             ).rename(columns={0: 'frequency', 1:'Pros'})
+
 st.write('Top pros')
 st.write(df_ngram)
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
@@ -431,7 +431,7 @@ count_values = ngrams_cons.toarray().sum(axis=0)
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
 df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)
-            ).rename(columns={0: 'frequency', 1:'Pros'})
+            ).rename(columns={0: 'frequency', 1:'Cons'})
 
 st.write('Top cons')
 str.write(df_ngram_cons)
