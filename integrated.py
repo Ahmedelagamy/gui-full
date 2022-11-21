@@ -339,6 +339,7 @@ len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(da
 st.write('search terms used are:')
 st.write(data['Search Name'].unique()) 
 
+st.write( 'Source Analysis')
 analyzed_total = len(data) - (len(data[data['Rev_Type']== 'Suspected'])+ len(data[data['Word_Count']==1]))
 youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
 amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')])
