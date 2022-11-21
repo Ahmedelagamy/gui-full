@@ -336,13 +336,14 @@ data['Rev_Type'].replace(0,'Real', inplace=True)
 
 len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
 
-
+analyzed_total = len(df) - (len(df[df['Rev_Type']== 'Suspected'])+ len(df[df['Word_Count']==1]))
 youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
 amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')])
 google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')])
 
 data = {"Columns":['Total Reviews', 'suspected reviews','One Word Reviews','English reviews','Total Analyzed'],
-        'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "YouTube") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]), youtube_total],
+        'Total':[len(data), len(df[df['Rev_Type']== 'Suspected']), len(df[df['Word_Count']==1]),len(df[df['detect']=='en']), analyzed_total ]
+        ,'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "YouTube") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]), youtube_total],
         'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "Amazon") & (data['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]), amazon_total],
         'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')]),len(data[(data['Data Source'] == "Google") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]),google_total]}
 
