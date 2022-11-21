@@ -432,10 +432,10 @@ ngrams_cons = c_vec.fit_transform(bad_reviews_data)
 count_values = ngrams_cons.toarray().sum(axis=0)
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
-df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)
-            ).rename(columns={0: 'frequency', 1:'Cons'})
+df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
 
 st.write('Top cons')
+
 str.write(df_ngram_cons)
 
 # Insert containers separated into tabs:
