@@ -410,9 +410,9 @@ good_reviews_data= clean_text(good_reviews, 'Comment')
 
 # ngram
 from sklearn.feature_extraction.text import CountVectorizer
-stoplist = stopwords.words('english') + ['though']
 
-c_vec = CountVectorizer(stop_words=stoplist, ngram_range=(2,3))
+
+c_vec = CountVectorizer(stop_words= custom_stopwords, ngram_range=(2,4))
 # matrix of ngrams
 ngrams = c_vec.fit_transform(good_reviews_data)
 # count frequency of ngrams
@@ -422,6 +422,7 @@ vocab = c_vec.vocabulary_
 df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
             ).rename(columns={0: 'frequency', 1:'Pros'})
 
+df_pros['percentage'] = df_pros['frequency'].apply(lambda x: (x / df_pros['frequency'].sum()) * 100/100)
 st.write('Top pros')
 st.write(df_pros)
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
@@ -433,7 +434,7 @@ count_values = ngrams_cons.toarray().sum(axis=0)
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
 df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
-
+df_ngram_cons['percentage'] = df_ngram_cons['frequency'].apply(lambda x: (x / df_ngram_cons['frequency'].sum()) * 100/100)
 st.write('Top cons')
 
 st.write(df_ngram_cons)
