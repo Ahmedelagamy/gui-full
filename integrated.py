@@ -336,7 +336,8 @@ data['Rev_Type'].replace(0,'Real', inplace=True)
 
 len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
 
-st.write('search terms used are' + data['Search Name'].unique()) 
+st.write('search terms used are:')
+st.write(data['Search Name'].unique()) 
 
 analyzed_total = len(data) - (len(data[data['Rev_Type']== 'Suspected'])+ len(data[data['Word_Count']==1]))
 youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
