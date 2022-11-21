@@ -436,7 +436,7 @@ df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.i
 
 st.write('Top cons')
 
-str.write(df_ngram_cons)
+st.write(df_ngram_cons)
 
 # Insert containers separated into tabs:
 from bertopic import BERTopic
