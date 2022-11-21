@@ -418,11 +418,23 @@ ngrams = c_vec.fit_transform(good_reviews_data)
 count_values = ngrams.toarray().sum(axis=0)
 # list of ngrams
 vocab = c_vec.vocabulary_
-df_ngram = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
-            ).rename(columns={0: 'frequency', 1:'bigram/trigram'})
+df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
+            ).rename(columns={0: 'frequency', 1:'Pros'})
 st.write('Top pros')
 st.write(df_ngram)
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
+
+
+ngrams_cons = c_vec.fit_transform(bad_reviews_data)
+# count frequency of ngrams
+count_values = ngrams_cons.toarray().sum(axis=0)
+# list of ngrams
+vocab_cons = c_vec.vocabulary_
+df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)
+            ).rename(columns={0: 'frequency', 1:'Pros'})
+
+st.write('Top cons')
+str.write(df_ngram_cons)
 
 # Insert containers separated into tabs:
 from bertopic import BERTopic
