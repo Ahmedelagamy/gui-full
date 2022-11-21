@@ -197,10 +197,6 @@ data['Neg_Count'] = negative_count
 #Word Count
 data['Word_Count'] = data['Comment'].str.split().str.len()
 
-'''for i in range(data.shape[0]):
-    if data.loc[i].Word_Count == 0:
-        data.drop(index=i, inplace=True)
-data.reset_index(drop=True, inplace=True)'''
 
 reviews = data['Comment'].str.lower().str.split()
 
@@ -317,7 +313,6 @@ def label(Auth, At, N, Adj, V, Av, S, Sub, W):
 
 data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Noun_Count'], x['Adj_Count'], x['Verb_Count'], x['Adv_Count'], x['Sentiment'], x['Subjectivity'], x['Word_Count']), axis = 1)
 
-st.write(data['Rev_Type'].value_counts())
 
 
 
