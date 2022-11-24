@@ -314,8 +314,9 @@ def label(Auth, At, N, Adj, V, Av, S, Sub, W):
 data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Noun_Count'], x['Adj_Count'], x['Verb_Count'], x['Adv_Count'], x['Sentiment'], x['Subjectivity'], x['Word_Count']), axis = 1)
 
 
-
-
+import datetime 
+today = datetime.date.today ()
+st.write(today)
 
 en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
 bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
