@@ -316,7 +316,7 @@ data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Nou
 
 import datetime 
 today = datetime.date.today ()
-"""**st.write(today)**"""
+
 
 en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
 bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
@@ -354,6 +354,7 @@ data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews',
 
 # Create DataFrame
 df_1 = pd.DataFrame(data)
+st.write(today)
 st.write(df_1)
 df_1 =df_1.to_csv(index=False).encode('utf-8')
 st.download_button(
