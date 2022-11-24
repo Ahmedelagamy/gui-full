@@ -317,7 +317,7 @@ data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Nou
 import datetime 
 today = datetime.date.today ()
 
-
+st.write(data)
 en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
 bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
 good_reviews = en_df[en_df['human_sentiment'] == 'Positive']
