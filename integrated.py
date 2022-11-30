@@ -436,7 +436,8 @@ df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.i
 df_ngram_cons['percentage'] = df_ngram_cons['frequency'].apply(lambda x: (x / df_ngram_cons['frequency'].sum()) * 100/100)
 st.write('Top cons')
 
-st.write(df_ngram_cons)
+df4= df_pros.merge(df_ngram_cons)
+st.write(df4)
 
 # Insert containers separated into tabs:
 from bertopic import BERTopic
