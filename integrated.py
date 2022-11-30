@@ -394,7 +394,7 @@ def clean_text(dataframe, col_name):
         PorterStemmer()
         # Lemmatisation
         lem = WordNetLemmatizer()
-        text = [lem.lemmatize(word) for word in text]
+        text = [lem.lemmatize(word) for word in text if word not in stop_words]
 
         text = " ".join(text)
         # print(text)
