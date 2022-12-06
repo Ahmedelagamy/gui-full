@@ -1,10 +1,8 @@
 # imports
 import pandas as pd
 import streamlit as st
-from bertopic import BERTopic
 from textblob import TextBlob
 from umap import UMAP
-from hdbscan import HDBSCAN
 import re
 import nltk
 nltk.download('stopwords')
@@ -14,9 +12,7 @@ nltk.download('wordnet')
 from nltk.stem.wordnet import WordNetLemmatizer
 from langdetect import detect
 import sklearn
-# function to plot most frequent terms
 import nltk
-
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
@@ -26,18 +22,16 @@ stop_words = set(stopwords.words('english'))
 st.image('White Piovis Logo.png')
 st.title("Piovis Automate")
 st.sidebar.title('Review analyzer GUI')
-st.markdown("This application is a streamlit deployment to automate analysis")
 
 # Reading reviews
-
 uploaded_file = st.file_uploader("Choose a file")
 
 if uploaded_file is not None:
     data = pd.read_excel(uploaded_file)
 else:
     st.stop()
-    
-total_reviews_num = len(data)    
+
+total_reviews_num = len(data)
 
 
 # Making result human friendly
@@ -50,6 +44,7 @@ def get_analysis(score):
         return 'Positive'
 
 total_num_reviews= len(data)
+
 # Loading Data
 # Applying language detection
 
@@ -64,7 +59,7 @@ for i in range(len(data)):
         lang='no'
 
     langdet.append(lang)
-    
+
 data['detect'] = langdet
 # Select language module
 en_df = data[data['detect'] == 'en']
@@ -86,15 +81,6 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
 stop_words = set(stopwords.words('english'))
 import re
-
-#Text Feature Generation
-import string
-import nums_from_string
-#Model Training and Evaluation Imports
-import seaborn as sns
-import bertopic
-from bertopic import BERTopic
-from sklearn.cluster import MiniBatchKMeans
 
 POS = ['Noun_Count', 'Adj_Count', 'Verb_Count', 'Adv_Count', 'Pro_Count', 'Pre_Count', 'Con_Count', 'Art_Count', 'Nega_Count', 'Aux_Count']
 array_Noun=[]
@@ -119,11 +105,6 @@ for x in POS:
 
 
 
-
-
-import datefinder
-data = en_df
-
 #content= data['review-date'].astype('str').apply(datefinder.find_dates(data['review-date']))
 #content
 
@@ -131,24 +112,24 @@ data = en_df
 
 """**Removing Noise**"""
 
-data['Comment'] = data['Comment'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
+en_df['Comment'] = en_df['Comment'].apply(lambda x: x.encode('ascii', 'ignore').decode('ascii'))
 
 def fixContra(text):
     return contractions.fix(text)
 
-data['Comment'] = data['Comment'].apply(lambda x: fixContra(x))
+en_df['Comment'] = en_df['Comment'].apply(lambda x: fixContra(x))
 # \W represents Special characters
-data['Comment'] = data['Comment'].str.replace('\W', ' ')
+en_df['Comment'] = en_df['Comment'].str.replace('\W', ' ')
 # \d represents Numeric digits
-data['Comment'] = data['Comment'].str.replace('\d', ' ')
-data['Comment'] = data['Comment'].str.lower()
-data.head()
+en_df['Comment'] = en_df['Comment'].str.replace('\d', ' ')
+en_df['Comment'] = en_df['Comment'].str.lower()
+en_df.head()
 
 
 
 
 
-reviews = data['Comment'].tolist()
+reviews = en_df['Comment'].tolist()
 sentiment_score = []
 sentiment_subjectivity=[]
 for rev in reviews:
@@ -156,15 +137,15 @@ for rev in reviews:
     sentiment_score.append(testimonial.sentiment.polarity)
     sentiment_subjectivity.append(testimonial.sentiment.subjectivity)
 
-data['Sentiment'] = sentiment_score
-data['Subjectivity'] = sentiment_subjectivity
-data.head()
+en_df['Sentiment'] = sentiment_score
+en_df['Subjectivity'] = sentiment_subjectivity
+en_df.head()
 
 """**Visualizing the sentiment**"""
 
 pos = 0
 neg = 0
-for score in data['Sentiment']:
+for score in en_df['Sentiment']:
     if score > 0:
         pos += 1
     elif score < 0:
@@ -180,7 +161,7 @@ plt.pie(values, labels = label)
 st.pyplot(fig)
 
 #Number of Negative words in a review
-reviews = data['Comment'].tolist()
+reviews =en_df['Comment'].tolist()
 negative_count = []
 for rev in reviews:
     words = rev.split()
@@ -192,18 +173,18 @@ for rev in reviews:
             neg += 1
     negative_count.append(neg)
 
-data['Neg_Count'] = negative_count
+en_df['Neg_Count'] = negative_count
 
 #Word Count
-data['Word_Count'] = data['Comment'].str.split().str.len()
+en_df['Word_Count'] = en_df['Comment'].str.split().str.len()
 
 
-reviews = data['Comment'].str.lower().str.split()
+reviews = en_df['Comment'].str.lower().str.split()
 
 # Get amount of unique words
-data['Unique_words'] = reviews.apply(set).apply(len)
-data['Unique_words'] = data[['Unique_words']].div(data.Word_Count, axis=0)
-review_text = data['Comment']
+en_df['Unique_words'] = reviews.apply(set).apply(len)
+en_df['Unique_words'] = en_df[['Unique_words']].div(en_df.Word_Count, axis=0)
+review_text = en_df['Comment']
 
 array_Noun = []
 array_Adj = []
@@ -221,7 +202,7 @@ negations = ['no', 'not', 'none', 'nobody', 'nothing', 'neither', 'nowhere', 'ne
 auxilliary = ['am', 'is', 'are', 'was', 'were', 'be', 'being', 'been', 'will', 'would', 'shall', 'should', 'may', 'might', 'must', 'can', 'could', 'do', 'does', 'did', 'have', 'having', 'has', 'had']
 
 for j in review_text:
-    text = j ;
+    text = j
     filter=re.sub('[^\w\s]', '', text)
     conver_lower= filter.lower()
     Tinput = conver_lower.split(" ")
@@ -235,7 +216,7 @@ for j in review_text:
 
     for i in tokenized:
         wordsList = nltk.word_tokenize(i)
-        #wordsList = [w for w in wordsList if not w in stop_words]
+        wordsList = [w for w in wordsList if not w in stop_words]
 
         Art = 0
         Nega = 0
@@ -275,20 +256,19 @@ POS = ['Noun_Count', 'Adj_Count', 'Verb_Count', 'Adv_Count', 'Pro_Count', 'Pre_C
 Values = [array_Noun, array_Adj, array_Verb, array_Adv, array_Pro, array_Pre, array_Con, array_Art, array_Nega, array_Aux]
 i = 0
 for x in POS:
-    data[x] = pd.Series(Values[i])
-    data[x] = data[x].fillna(0)
-    data[x] = data[x].astype(float)
+    en_df[x] = pd.Series(Values[i])
+    en_df[x] = en_df[x].fillna(0)
+    en_df[x] = en_df[x].astype(float)
     i += 1
 
 
 
-data = data.assign(Authenticity = lambda x: (x.Pro_Count + x.Unique_words - x.Nega_Count) / x.Word_Count)
+en_df = en_df.assign(Authenticity = lambda x: (x.Pro_Count + x.Unique_words - x.Nega_Count) / x.Word_Count)
 
 
-data = data.assign(AT = lambda x: 30 + (x.Art_Count + x.Pre_Count - x.Pro_Count - x.Aux_Count - x.Con_Count - x.Adv_Count - x.Nega_Count))
+en_df = en_df.assign(AT = lambda x: 30 + (x.Art_Count + x.Pre_Count - x.Pro_Count - x.Aux_Count - x.Con_Count - x.Adv_Count - x.Nega_Count))
 
-
-data.to_csv('before_labeling.csv')
+en_df.to_csv('before_labeling.csv')
 
 
 #criteria for labeling
@@ -311,10 +291,10 @@ def label(Auth, At, N, Adj, V, Av, S, Sub, W):
     else:
         return 0
 
-data['Rev_Type'] = data.apply(lambda x: label(x['Authenticity'], x['AT'], x['Noun_Count'], x['Adj_Count'], x['Verb_Count'], x['Adv_Count'], x['Sentiment'], x['Subjectivity'], x['Word_Count']), axis = 1)
+en_df['Rev_Type'] = en_df.apply(lambda x: label(x['Authenticity'], x['AT'], x['Noun_Count'], x['Adj_Count'], x['Verb_Count'], x['Adv_Count'], x['Sentiment'], x['Subjectivity'], x['Word_Count']), axis = 1)
 
 
-import datetime 
+import datetime
 today = datetime.date.today ()
 
 
@@ -327,29 +307,25 @@ custom_stopwords = st.text_input('Enter Stopword')
 custom_stopwords = custom_stopwords.split()
 nltk_Stop= stopwords.words("english")
 final_stop_words = nltk_Stop + custom_stopwords
-data['Rev_Type'].replace(1,'Suspected',inplace=True)
-data['Rev_Type'].replace(0,'Real', inplace=True)
-
-
-
-len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Youtube") & (data['Rev_Type']== 'Suspected')])
+en_df['Rev_Type'].replace(1,'Suspected',inplace=True)
+en_df['Rev_Type'].replace(0,'Real', inplace=True)
 
 st.write('search terms used are:')
-st.write(data['Search Name'].unique()) 
+st.write(data['Search Name'].unique())
 
 st.write( 'Source Analysis')
-analyzed_total = total_num_reviews - (len(data[data['Rev_Type']== 'Suspected'])+ len(data[data['Word_Count']==1]))
-youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')])
-amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')])
-google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')])
-definitions= ['total number of analyzed reviews from said source','suspicious reviews basaed on linguistic features such as POS tagging', 'reviews that have one word only','Reviews in English','actually analyzed for output']
+analyzed_total = len(data) - (len(en_df[en_df['Rev_Type']== 'Suspected'])+ len(en_df[en_df['Word_Count']==1]) + len(data[data['detect']!='en']))
+youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')])
+amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')])
+google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')])
+definitions= ['total number of analyzed reviews from said source','suspicious reviews basaed on linguistic features such as POS tagging', 'reviews that have one word only','Reviews in other languages','actually analyzed for output']
 
-data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews','English reviews','Total Analyzed'],
-        'definitions': definitions
-        ,'Total':[total_num_reviews, len(data[data['Rev_Type']== 'Suspected']), len(data[data['Word_Count']==1]),len(data[data['detect']=='en']), analyzed_total ]
-        ,'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "YouTube") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]), youtube_total],
-        'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (data['Rev_Type']== 'Suspected')]), len(data[(data['Data Source'] == "Amazon") & (data['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]), amazon_total],
-        'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (data['Rev_Type']== 'Suspected')]),len(data[(data['Data Source'] == "Google") & (data['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]),google_total]}
+data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews','non-English reviews','Total Analyzed']
+    ,'definitions': definitions
+    ,'Total':[len(data), len(en_df[en_df['Rev_Type']== 'Suspected']), len(en_df[en_df['Word_Count']==1]), len(data[data['detect']!='en']), analyzed_total ]
+    ,'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "YouTube") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']!= 'en')]), youtube_total],
+    'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "Amazon") & (en_df['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']!= 'en')]), amazon_total],
+    'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')]),len(en_df[(en_df['Data Source'] == "Google") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']!= 'en')]),google_total]}
 
 
 # Create DataFrame
@@ -358,10 +334,10 @@ st.write(today)
 st.write(df_1)
 df_1 =df_1.to_csv(index=False).encode('utf-8')
 st.download_button(
-label="Download Analysis",
-data=df_1,
-mime='text/csv',
-file_name='analysis.csv')
+    label="Download Analysis",
+    data=df_1,
+    mime='text/csv',
+    file_name='analysis.csv')
 
 #text cleaning function
 def clean_text(dataframe, col_name):
@@ -391,7 +367,7 @@ def clean_text(dataframe, col_name):
         text = text.split()
 
         # Stemming
-        PorterStemmer()
+        stem=PorterStemmer()
         # Lemmatisation
         lem = WordNetLemmatizer()
         text = [lem.lemmatize(word) for word in text if word not in stop_words]
@@ -406,12 +382,9 @@ def clean_text(dataframe, col_name):
 # Applying function
 bad_reviews_data = clean_text(bad_reviews, 'Comment')
 good_reviews_data= clean_text(good_reviews, 'Comment')
-
 # ngram
-from sklearn.feature_extraction.text import CountVectorizer
-
-
-c_vec = CountVectorizer(stop_words= custom_stopwords, ngram_range=(2,4))
+from sklearn.feature_extraction.text import TfidfVectorizer
+c_vec = TfidfVectorizer( stop_words= custom_stopwords, ngram_range=(2,3))
 # matrix of ngrams
 ngrams = c_vec.fit_transform(good_reviews_data)
 # count frequency of ngrams
@@ -419,89 +392,24 @@ count_values = ngrams.toarray().sum(axis=0)
 # list of ngrams
 vocab = c_vec.vocabulary_
 df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
-            ).rename(columns={0: 'frequency', 1:'Pros'})
+                       ).rename(columns={0: 'frequency', 1:'Pros'})
 
-df_pros['percentage'] = df_pros['frequency'].apply(lambda x: (x / df_pros['frequency'].sum()) * 100/100)
 st.write('Top pros')
-st.write(df_pros)
+st.write(df_pros[:15])
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
 
 
 ngrams_cons = c_vec.fit_transform(bad_reviews_data)
+
 # count frequency of ngrams
 count_values = ngrams_cons.toarray().sum(axis=0)
+
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
 df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
-df_ngram_cons['percentage'] = df_ngram_cons['frequency'].apply(lambda x: (x / df_ngram_cons['frequency'].sum()) * 100/100)
 st.write('Top cons')
 
-st.write(df_ngram_cons)
-
-# Insert containers separated into tabs:
-from bertopic import BERTopic
-
-# Create instances of GPU-accelerated UMAP and HDBSCAN
-
-umap_model = UMAP(n_components=10, n_neighbors=15, min_dist=0.0, random_state= 42)
-# Create TF-IDF sparse matrix
-topic_model = BERTopic(language= 'en',umap_model=umap_model, n_gram_range= (2,3), verbose=True, embedding_model="all-mpnet-base-v2")
-
-# Models
-if tab == 'Positive Review':
-    
-  st.subheader('Positive Reviews')
- 
-    
-# Fixing small dataset bug
-  if len(good_reviews) < 200: # Workaround if not enough documents https://github.com/MaartenGr/BERTopic/issues/97 , https://github.com/MaartenGr/Concept/issues/5
-    good_reviews_data.extend(3*good_reviews_data)
-  else:
-    pass
-    
-  topic_model.fit(good_reviews_data)         
-
-else:
-  
-     
-    # Feature Engineering
-  st.subheader('Negative Reviews')
-    #Accounting for small dataset
-    
-  if len(bad_reviews) < 300: # Workaround if not enough documents https://github.com/MaartenGr/BERTopic/issues/97 , https://github.com/MaartenGr/Concept/issues/5
-        bad_reviews_data.extend(3*bad_reviews_data)
-
-        
-  st.dataframe(bad_reviews_data)
-  topic_model.fit(bad_reviews_data)
-
-topic_model.get_topic_info()
-    
-topic_labels = topic_model.generate_topic_labels(nr_words= 3)
-topic_model.set_topic_labels(topic_labels)
-    
-    
-    # pros
-topic_info = topic_model.get_topic_info()
-    
-if len(good_reviews) < 300:
-  topic_info['Count']=topic_info['Count']/4
-  topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
-else:
-  topic_info['percentage'] = topic_info['Count'].apply(lambda x: (x / topic_info['Count'].sum()) * 100)
-    
-st.write(topic_info)
-doc_num = int(st.number_input('enter the number of topic to explore', value= 0))
-st.write(topic_model.get_representative_docs(doc_num))
-
-#Creating a dataframe
-topic_info_data =topic_info.to_csv(index=False).encode('utf-8')
-
-st.download_button(
-     label="Download topics",
-     data=topic_info_data,
-     mime='text/csv',
-     file_name='topics.csv')
+st.write(df_ngram_cons[:15])
 
 
 
