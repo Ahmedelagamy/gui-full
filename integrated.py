@@ -315,9 +315,9 @@ st.write(data['Search Name'].unique())
 
 st.write( 'Source Analysis')
 analyzed_total = len(data) - (len(en_df[en_df['Rev_Type']== 'Suspected'])+ len(en_df[en_df['Word_Count']==1]) + len(data[data['detect']!='en']))
-youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')])
-amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')])
-google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')])
+youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Youtube") & (en_df['Word_Count']==1)])
+amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Amazon") & (en_df['Word_Count']==1)])
+google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Google") & (en_df['Word_Count']==1)])
 definitions= ['total number of analyzed reviews from said source','suspicious reviews basaed on linguistic features such as POS tagging', 'reviews that have one word only','Reviews in other languages','actually analyzed for output']
 
 data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews','non-English reviews','Total Analyzed']
@@ -325,7 +325,8 @@ data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews',
     ,'Total':[len(data), len(en_df[en_df['Rev_Type']== 'Suspected']), len(en_df[en_df['Word_Count']==1]), len(data[data['detect']!='en']), analyzed_total ]
     ,'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "YouTube") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']!= 'en')]), youtube_total],
     'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "Amazon") & (en_df['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']!= 'en')]), amazon_total],
-    'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')]),len(en_df[(en_df['Data Source'] == "Google") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']!= 'en')]),google_total]}
+    'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')]),len(en_df[(en_df['Data Source'] == "Google") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']!= 'en')]),google_total],
+        'Trust pilot':[0,0,0,0,0]}
 
 
 # Create DataFrame
@@ -384,7 +385,7 @@ bad_reviews_data = clean_text(bad_reviews, 'Comment')
 good_reviews_data= clean_text(good_reviews, 'Comment')
 # ngram
 from sklearn.feature_extraction.text import TfidfVectorizer
-c_vec = TfidfVectorizer( stop_words= custom_stopwords, ngram_range=(2,3))
+c_vec = TfidfVectorizer(analyzer= 'word' ,stop_words= custom_stopwords, ngram_range=(2,4))
 # matrix of ngrams
 ngrams = c_vec.fit_transform(good_reviews_data)
 # count frequency of ngrams
@@ -394,8 +395,9 @@ vocab = c_vec.vocabulary_
 df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
                        ).rename(columns={0: 'frequency', 1:'Pros'})
 
+df_pros['percentage'] = df_pros['frequency'].apply(lambda x: (x / df_pros['frequency'].sum()*100))
 st.write('Top pros')
-st.write(df_pros[:15])
+st.write(df_pros)
 tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
 
 
@@ -407,9 +409,8 @@ count_values = ngrams_cons.toarray().sum(axis=0)
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
 df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
+df_ngram_cons['percentage'] = df_ngram_cons['frequency'].apply(lambda x: (x / df_ngram_cons['frequency'].sum()))
 st.write('Top cons')
 
-st.write(df_ngram_cons[:15])
 
-
-
+st.write(df_ngram_cons)
