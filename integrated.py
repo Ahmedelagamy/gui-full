@@ -318,6 +318,7 @@ analyzed_total = len(data) - (len(en_df[en_df['Rev_Type']== 'Suspected'])+ len(e
 youtube_total = len(data[(data['Data Source'] == "YouTube") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Youtube") & (en_df['Word_Count']==1)])
 amazon_total = len(data[(data['Data Source'] == "Amazon") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Amazon") & (en_df['Word_Count']==1)])
 google_total = len(data[(data['Data Source'] == "Google") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Google") & (en_df['Word_Count']==1)])
+Trustpilot_total = len(data[(data['Data Source'] == "Trustpilot") & (data['detect']== 'en')]) - len(en_df[(en_df['Data Source'] == "Trustpilot") & (en_df['Rev_Type']== 'Suspected')])-len(data[(data['Data Source'] == "Trustpilot") & (en_df['Word_Count']==1)])
 definitions= ['total number of analyzed reviews from said source','suspicious reviews basaed on linguistic features such as POS tagging', 'reviews that have one word only','Reviews in other languages','actually analyzed for output']
 
 data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews','non-English reviews','Total Analyzed']
@@ -326,7 +327,7 @@ data = {"Columns":['Total Reviews', 'suspected fake reviews','One Word Reviews',
     ,'Youtube':[len(data[data['Data Source']== "YouTube"]), len(data[(data['Data Source'] == "YouTube") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "YouTube") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "YouTube") & (data['detect']!= 'en')]), youtube_total],
     'Amazon':[len(data[data['Data Source']== "Amazon"]), len(data[(data['Data Source'] == "Amazon") & (en_df['Rev_Type']== 'Suspected')]), len(en_df[(en_df['Data Source'] == "Amazon") & (en_df['Word_Count']== 1)]), len(data[(data['Data Source'] == "Amazon") & (data['detect']!= 'en')]), amazon_total],
     'Google':[len(data[data['Data Source']== "Google"]),len(data[(data['Data Source'] == "Google") & (en_df['Rev_Type']== 'Suspected')]),len(en_df[(en_df['Data Source'] == "Google") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "Google") & (data['detect']!= 'en')]),google_total],
-        'Trust pilot':[0,0,0,0,0]}
+        'Trust pilot':[len(data[data['Data Source']== "Trustpilot"]),len(data[(data['Data Source'] == "Trustpilot") & (en_df['Rev_Type']== 'Suspected')]),len(en_df[(en_df['Data Source'] == "Trustpilot") & (en_df['Word_Count']== 1)]),len(data[(data['Data Source'] == "Trustpilot") & (data['detect']!= 'en')]),Trustpilot_total]}
 
 
 # Create DataFrame
@@ -398,7 +399,12 @@ df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], re
 df_pros['percentage'] = df_pros['frequency'].apply(lambda x: (x / df_pros['frequency'].sum()*100))
 st.write('Top pros')
 st.write(df_pros)
-tab = st.sidebar.selectbox('Pick one', ['Positive Review', 'Negative Review'])
+df_pros =df_pros.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="Download pros",
+    data=df_pros,
+    mime='text/csv',
+    file_name='pros_analysis.csv')
 
 
 ngrams_cons = c_vec.fit_transform(bad_reviews_data)
@@ -414,3 +420,10 @@ st.write('Top cons')
 
 
 st.write(df_ngram_cons)
+df_ngram_cons =df_ngram_cons.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="Download cons",
+    data=df_ngram_cons,
+    mime='text/csv',
+    file_name='cons.csv')
+
